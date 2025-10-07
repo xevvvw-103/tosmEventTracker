@@ -184,7 +184,7 @@ const props = defineProps({
   maps: Array as () => MapData[],
 });
 
-const emit = defineEmits(["add-note", "update-map-star"]);
+const emit = defineEmits(["add-note", "update-map-star", "update-star-filter"]);
 
 const inputContent = ref("");
 const timeInput = ref("");
@@ -331,12 +331,15 @@ const handleEpisodeSelection = (ep: number | "star" | 0) => {
   if (ep === "star") {
     isStarSelection.value = true;
     selectedEpisode.value = 0;
+    emit("update-star-filter", true);
   } else if (ep === 0) {
     isStarSelection.value = false;
     selectedEpisode.value = 0;
+    emit("update-star-filter", false);
   } else {
     isStarSelection.value = false;
     selectedEpisode.value = ep;
+    emit("update-star-filter", false);
   }
   isChannelConfirmed.value = false;
 };

@@ -2,7 +2,7 @@
   <el-card>
     <div v-if="notes.length === 0" class="no-notes-message">沒有任何記錄。</div>
     <div v-else>
-      <div class="notes-count">總計: {{ notes.length }} 筆記錄</div>
+      <div class="notes-count">總計: {{ filteredNotes.length }} 筆記錄</div>
       <div class="list-actions">
         <el-button @click="sortNotes">
           {{ sortButtonText }}
@@ -47,7 +47,7 @@
 
       <transition-group name="list-item" tag="div">
         <el-row
-          v-for="note in notes"
+          v-for="note in filteredNotes"
           :key="note.id"
           class="list-item"
           :class="{
@@ -217,6 +217,7 @@ const props = defineProps<{
   currentSortMode: "time" | "map";
   maps: MapData[];
   mapImageCache: Record<string, string>; // 接收圖片快取
+  showStarredOnly?: boolean;
 }>();
 
 const emit = defineEmits([
@@ -236,6 +237,17 @@ const isXs = ref(false);
 const checkXs = () => {
   isXs.value = window.innerWidth < 768;
 };
+
+// --------------------- 過濾筆記 ---------------------
+const filteredNotes = computed(() => {
+  if (!props.showStarredOnly) {
+    return props.notes;
+  }
+  return props.notes.filter((note) => {
+    const map = props.maps.find((m) => m.level === note.mapLevel && m.name === note.noteText);
+    return map?.isStarred;
+  });
+});
 
 onMounted(() => {
   checkXs();

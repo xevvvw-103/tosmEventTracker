@@ -32,6 +32,7 @@
         :hasSound="hasInputSoundOn"
         :maps="maps"
         @update-map-star="handleUpdateMapStar"
+        @update-star-filter="handleUpdateStarFilter"
       />
       <div class="list-card-container">
         <NoteList
@@ -48,6 +49,7 @@
           @show-update-dialog="handleShowUpdateDialog"
           @update-note-alerted="handleUpdateNoteAlerted"
           :mapImageCache="mapImageCache"
+          :showStarredOnly="showStarredOnly"
         />
       </div>
       <UpdateStatusDialog
@@ -296,6 +298,7 @@ const importExportData = ref("");
 
 const showUpdateDialog = ref(false);
 const currentNoteToUpdate = ref<Note | null>(null);
+const showStarredOnly = ref(false);
 
 const handleShowUpdateDialog = (noteId: string) => {
   const note = notes.value.find((n) => n.id === noteId);
@@ -606,6 +609,10 @@ const handleUpdateNoteAlerted = async (id: string) => {
       localStorage.setItem("notes", JSON.stringify(notes.value));
     }
   }
+};
+
+const handleUpdateStarFilter = (isStarred: boolean) => {
+  showStarredOnly.value = isStarred;
 };
 
 // const exportNotes = async () => {
