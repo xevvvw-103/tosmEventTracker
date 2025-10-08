@@ -52,7 +52,7 @@ export function useFirebaseLogs() {
     try {
       const userId = getUserId();
       const displayText = noteText || note.noteText || `Map ${note.mapLevel}`;
-      const noteInfo = `EP.${Math.ceil(note.mapLevel / 10)} ${displayText} CH.${note.channel}`;
+      const noteInfo = `Lv.${note.mapLevel} ${displayText} CH.${note.channel}`;
 
       const logEntry: Omit<ActivityLog, 'id'> = {
         userId,
