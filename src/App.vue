@@ -208,6 +208,36 @@ const mapMigrations: ((mapsData: MapData[]) => MapData[])[] = [
 
     return migratedMaps;
   },
+
+  // v2 → v3: 新增 'element' 和 'race' 欄位
+  (mapsData) => {
+    console.log("Applying migration: v2 to v3 (Adding element and race)");
+
+    // 建立 Map 以 level + name 作為 key 來查找
+    const originalMapsData = new Map(
+      originalMaps.map((map) => [`${map.level}-${map.name}`, { element: map.element, race: map.race }])
+    );
+
+    const migratedMaps = mapsData.map((map) => {
+      const key = `${map.level}-${map.name}`;
+      const newData = originalMapsData.get(key);
+      if (newData) {
+        return {
+          ...map,
+          element: newData.element || '',
+          race: newData.race || '',
+        };
+      }
+      // 如果找不到，設置為空字串
+      return {
+        ...map,
+        element: map.element || '',
+        race: map.race || '',
+      };
+    });
+
+    return migratedMaps;
+  },
 ];
 
 // ---------------------
