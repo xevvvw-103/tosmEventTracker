@@ -159,6 +159,15 @@
                 >{{ getStatusText(note) }}</el-button
               >
             </span>
+            <span v-else-if="note.state === 'IDLE'">
+              <el-button
+                plain
+                type="info"
+                size="small"
+                @click="handleExpiredClick(note)"
+                >閒置</el-button
+              >
+            </span>
             <span v-else>
               {{ getStatusText(note) }}
             </span>
