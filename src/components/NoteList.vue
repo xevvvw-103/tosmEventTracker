@@ -25,7 +25,8 @@
       <el-row class="list-header" :gutter="10">
         <el-col :span="1" :xs="0"></el-col>
         <el-col :span="3">區域</el-col>
-        <el-col :span="7" :xs="6">地圖</el-col>
+        <el-col :span="6" :xs="6">地圖</el-col>
+        <el-col :span="2" :xs="0">屬/種</el-col>
         <el-col :span="3">
           分流
           <el-button
@@ -36,7 +37,7 @@
             @click="toggleChannelAdjust"
           />
         </el-col>
-        <el-col :span="6" :xs="9">
+        <el-col :span="5" :xs="9">
           狀態
           <el-button size="small" type="" @click="toggleTimeDisplay">
             切換CD時間
@@ -67,7 +68,7 @@
             <span v-if="!isXs">EP.</span>
             {{ getEpisode(note.mapLevel) }}
           </el-col>
-          <el-col :span="7" :xs="8">
+          <el-col :span="6" :xs="8">
             <span class="map-name-content">
               <!-- <el-popover
                 v-if="!isXs"
@@ -113,6 +114,10 @@
               </el-icon>
             </span>
           </el-col>
+          <el-col :span="2" :xs="0" style="font-size: 12px; line-height: 1.2">
+            <div v-if="getMapElement(note.mapLevel, note.noteText)">{{ getMapElement(note.mapLevel, note.noteText) }}</div>
+            <div v-if="getMapRace(note.mapLevel, note.noteText)">{{ getMapRace(note.mapLevel, note.noteText) }}</div>
+          </el-col>
           <el-col
             :span="3"
             :xs="2"
@@ -132,7 +137,7 @@
               >+</el-button
             >
           </el-col>
-          <el-col :span="6" :xs="9">
+          <el-col :span="5" :xs="9">
             <span v-if="note.state === 'CD' && note.respawnTime <= currentTime">
               <el-button
                 type="warning"
@@ -330,6 +335,26 @@ const getMapName = (level: number) => {
 const getMapEnName = (name: string) => {
   const map = props.maps.find((m) => m.name === name);
   return map ? map.enName : "unknown";
+};
+
+const getMapElement = (level: number, noteText: string) => {
+  const mapName = noteText || getMapName(level);
+  let map = props.maps.find((m) => m.level === level && m.name === mapName);
+  // Fallback: if not found, try matching just by level
+  if (!map) {
+    map = props.maps.find((m) => m.level === level);
+  }
+  return map ? map.element : "";
+};
+
+const getMapRace = (level: number, noteText: string) => {
+  const mapName = noteText || getMapName(level);
+  let map = props.maps.find((m) => m.level === level && m.name === mapName);
+  // Fallback: if not found, try matching just by level
+  if (!map) {
+    map = props.maps.find((m) => m.level === level);
+  }
+  return map ? map.race : "";
 };
 
 const speakNoteDetails = (note: Note) => {
