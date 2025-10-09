@@ -40,6 +40,13 @@
       >
         更新CD
       </el-button>
+      <el-button
+        type="info"
+        @click="handleSelection('idle')"
+        style="width: 60px; margin-left: 5px"
+      >
+        閒置
+      </el-button>
     </div>
 
     <!-- 階段 -->
@@ -112,6 +119,9 @@ const handleSelection = (action: string) => {
     newState = "ON";
     newTime =
       props.currentNote.state === "ON" ? props.currentNote.onTime : Date.now();
+  } else if (action === "idle") {
+    newState = "IDLE";
+    newTime = null;
   } else {
     const stage = action.split("_")[1];
     newState = `STAGE_${stage}` as NoteState;

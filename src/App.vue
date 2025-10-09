@@ -100,7 +100,7 @@
 import { ref, onMounted, watch, h, provide } from "vue";
 
 const featureFlags = ref({
-  nosec: false,
+  nosec: true,
   pic: false,
   en: false,
 });

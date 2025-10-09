@@ -1,4 +1,4 @@
-export type NoteState = "CD" | "ON" | `STAGE_${number}`;
+export type NoteState = "CD" | "ON" | "IDLE" | `STAGE_${number}`;
 
 export interface Note {
   id: string;
