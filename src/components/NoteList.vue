@@ -21,6 +21,11 @@
         >
           一鍵清除
         </el-button>
+        <div
+          class="admin-password-area"
+          @dblclick="handlePasswordClick"
+        >
+        </div>
       </div>
       <el-row class="list-header" :gutter="10">
         <el-col :span="1" :xs="0"></el-col>
@@ -282,9 +287,32 @@ const showChannelAdjust = ref(false);
 
 const ON_TIME_LIMIT_MS = 30 * 60 * 1000;
 const isAllSoundOn = ref(true);
+const showAdminPassword = ref(false);
+const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
 
 const toggleTimeDisplay = () => {
   showLocalTime.value = !showLocalTime.value;
+};
+
+const handlePasswordClick = async () => {
+  showAdminPassword.value = !showAdminPassword.value;
+
+  if (showAdminPassword.value && adminPassword) {
+    try {
+      await navigator.clipboard.writeText(adminPassword);
+      ElMessage({
+        message: '密碼已複製到剪貼簿',
+        type: 'success',
+        duration: 2000
+      });
+    } catch (err) {
+      ElMessage({
+        message: '複製失敗',
+        type: 'error',
+        duration: 2000
+      });
+    }
+  }
 };
 
 const toggleChannelAdjust = () => {
@@ -604,6 +632,26 @@ const handleClearAll = async () => {
 .list-actions {
   text-align: left;
   margin-bottom: 10px;
+}
+
+.admin-password-area {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 5px 10px;
+  min-width: 20px;
+  min-height: 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.admin-password-area:hover {
+  background-color: var(--el-color-info-light-9);
+}
+
+.admin-password-area span {
+  color: var(--el-text-color-primary);
+  font-size: 14px;
 }
 .list-header {
   font-weight: bold;
